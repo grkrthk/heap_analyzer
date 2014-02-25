@@ -44,5 +44,6 @@ for line in fpage:
 for key, value in pagetables.iteritems() :
     print key, value
 
+# for now it should just be one key
 for key in pagetables.keys():
     print key
