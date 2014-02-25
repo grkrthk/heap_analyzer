@@ -27,8 +27,8 @@ for line in fpage:
          if ptr2addr in subaddr :
                 pagetables[page_name] = ptr2
 
- 	 print pagetables[page_name]
-         
+ 	 values = pagetables.values()
+         print values
          # increment the count after every line is processed
          count = count + 1
             
