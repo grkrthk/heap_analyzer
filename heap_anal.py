@@ -22,21 +22,27 @@ for line in fpage:
          ptr1addr = ptr1[4:9] # get the lower order address to compare for the first pointer
          ptr2addr = ptr2[4:9] # get the lower order address to compare for the second pointer         
        
-         print page_name
-
          if ptr1addr in subaddr :
                 # store it in the page related to it's data structure
-                pagetables[page_name].append(ptr1)
+                if page_name in pagetables.keys():
+                         pagetables[page_name].append(ptr1)
+                else:
+                         pagetables[page_name] = [ptr1]
                                      
          if ptr2addr in subaddr :
                 # store it in the page related to it's data structure
-                pagetables[page_name].append(ptr2)
-                
- 	 #values = pagetables.get(page_name)
-         #print values
+                if page_name in pagetables.keys():
+                         pagetables[page_name].append(ptr2)
+                else:
+                         pagetables[page_name] = [ptr2]
+         
          # increment the count after every line is processed
          count = count + 1
 
-values = pagetables.values()
-print values
+# print all the key value pairs. For now it should just be one key and multiple values
 
+for key, value in pagetables.iteritems() :
+    print key, value
+
+for key in pagetables.keys():
+    print key
