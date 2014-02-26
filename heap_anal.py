@@ -9,12 +9,18 @@ for line in fpage:
          # split the line into words
          wordList = re.sub("[^\w]", " ",  line).split()
          refw = wordList[0]
-
+         
          if count == 0 :
+                # initialize page_name to the first word
                 page_name = refw
+
+         # store the entire line as a function of page_name _ address         
+         data_for_line = page_name + "_" + wordList[0]
              
          ptr1 = wordList[2]+wordList[1]
          ptr2 = wordList[4]+wordList[3]
+
+         pagetables[data_for_line] = wordList[1] + "  " + wordList[2] + "  " + wordList[3] + "  " + wordList[4]          
 
          # compare the refw and ptr1 and ptr2 to determine if they look like pointers
 
@@ -41,9 +47,14 @@ for line in fpage:
 
 # print all the key value pairs. For now it should just be one key and multiple values
 
-for key, value in pagetables.iteritems() :
-    print key, value
+#for key, value in pagetables.iteritems() :
+#    print key, value
 
 # for now it should just be one key
-for key in pagetables.keys():
-    print key
+#for key in pagetables.keys():
+#    print key
+
+#nums = pagetables['7f1b1e49f000_7f1b1e49fdf0'].split()
+#value = nums[1].decode("hex")
+#print value
+
