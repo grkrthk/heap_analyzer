@@ -1,4 +1,5 @@
 import re
+import chardet
 # open the file that has the page
 fpage = open('./4k_block.txt', 'r')
 
@@ -54,7 +55,10 @@ for line in fpage:
 #for key in pagetables.keys():
 #    print key
 
-nums = pagetables['7f1b1e49f000_7f1b1e49f150'].split()
+nums = pagetables['7f1b1e49f000_7f1b1e49f010'].split()
 value = nums[1].decode("hex") + nums[0].decode("hex") + nums[3].decode("hex") + nums[2].decode("hex")
+encoding = chardet.detect(value)
+if encoding['encoding'] == 'ascii':
+    print 'string is in ascii'
 print value
 
