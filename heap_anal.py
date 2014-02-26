@@ -45,7 +45,7 @@ for line in fpage:
          # increment the count after every line is processed
          count = count + 1
 
-# print all the key value pairs. For now it should just be one key and multiple values
+# print all the key value pairs. 
 
 #for key, value in pagetables.iteritems() :
 #    print key, value
@@ -54,7 +54,7 @@ for line in fpage:
 #for key in pagetables.keys():
 #    print key
 
-#nums = pagetables['7f1b1e49f000_7f1b1e49fdf0'].split()
-#value = nums[1].decode("hex")
-#print value
+nums = pagetables['7f1b1e49f000_7f1b1e49f150'].split()
+value = nums[1].decode("hex") + nums[0].decode("hex") + nums[3].decode("hex") + nums[2].decode("hex")
+print value
 
