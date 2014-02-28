@@ -1,5 +1,7 @@
 import re
 import chardet
+
+#def page_analyze() :
 # open the file that has the page
 fpage = open('./4k_block.txt', 'r')
 
@@ -48,14 +50,14 @@ for line in fpage:
 
 # print all the key value pairs. 
 
-#for key, value in pagetables.iteritems() :
-#    print key, value
+for key, value in pagetables.iteritems() :
+    print key, value
 
 # for now it should just be one key
 #for key in pagetables.keys():
 #    print key
 
-nums = pagetables['7f1b1e49f000_7f1b1e49f010'].split()
+nums = pagetables['7f1b1e49f000_7f1b1e49f150'].split()
 value = nums[1].decode("hex") + nums[0].decode("hex") + nums[3].decode("hex") + nums[2].decode("hex")
 encoding = chardet.detect(value)
 if encoding['encoding'] == 'ascii':
