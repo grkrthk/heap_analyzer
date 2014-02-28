@@ -65,19 +65,20 @@ def page_analyze(fpage):
 
 
 pagetables = dict();
-fptr = open('./4k_full_blocks','r')
-buffer_read =""
-buffer_read += fptr.read()
+#buffer_read =""
+#buffer_read += fptr.read()
 cur_buf=""
-print buffer_read
-for line in buffer_read.readl():
-     if ("END OF PAGE" not in line):
-            print line
-            cur_buf += line
-     else :
-            print cur_buf
-            page_analyze(cur_buf)
-            cur_buf=""
+#print buffer_read
+#for line in buffer_read.readl():
+with  open('./4k_full_blocks','r') as fptr:
+        for line in iter(fptr.readline, ''):
+                if ("END OF PAGE" not in line):
+                        print line
+                        cur_buf += line
+                else :
+                        print cur_buf
+                        page_analyze(cur_buf)
+                        cur_buf=""
      
                      
            
