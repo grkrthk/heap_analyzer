@@ -1,14 +1,17 @@
 import re
 import chardet
 
-def page_analyze(fpage):
+def page_analyze(file_name):
 	# open the file that has the page
-	#fpage = open('./4k_block.txt', 'r')
+	fpage = open(file_name, 'r')
 	
 	page_name=""
 	count = 0
-	for line in fpage:
+	for line in iter(fpage.readline, ''):
+                 print line
 	         # split the line into words
+                 if(line == "\n"):
+                     continue
 	         wordList = re.sub("[^\w]", " ",  line).split()
 	         refw = wordList[0]
 	         
@@ -18,7 +21,7 @@ def page_analyze(fpage):
 	
 	         # store the entire line as a function of page_name _ address         
 	         data_for_line = page_name + "_" + wordList[0]
-	             
+     	             
 	         ptr1 = wordList[2]+wordList[1]
 	         ptr2 = wordList[4]+wordList[3]
 	
@@ -49,8 +52,8 @@ def page_analyze(fpage):
 	
 	# print all the key value pairs. 
 	
-	#for key, value in pagetables.iteritems() :
-	#    print key, value
+	for key, value in pagetables.iteritems() :
+	    print key, value
 	
 	# for now it should just be one key
 	#for key in pagetables.keys():
@@ -62,7 +65,7 @@ def page_analyze(fpage):
 	if encoding['encoding'] == 'ascii':
 	    print 'string is in ascii'
 	print value
-
+        
 
 pagetables = dict();
 #buffer_read =""
@@ -70,15 +73,20 @@ pagetables = dict();
 cur_buf=""
 #print buffer_read
 #for line in buffer_read.readl():
+count=0;
 with  open('./4k_full_blocks','r') as fptr:
         for line in iter(fptr.readline, ''):
                 if ("END OF PAGE" not in line):
-                        print line
                         cur_buf += line
+                        #cur_buf += "\n"
                 else :
-                        print cur_buf
-                        page_analyze(cur_buf)
-                        cur_buf=""
+                        file_name = str(count) + ".txt"
+                        fptr = open(file_name,"w+")
+                        fptr.write(cur_buf) 
+                        cur_buf = ""
+                        fptr.close()
+                        page_analyze(file_name)                      
+                        count = count + 1
      
                      
            
