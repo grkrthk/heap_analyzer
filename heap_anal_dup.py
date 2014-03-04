@@ -8,7 +8,7 @@ def page_analyze(file_name):
 	page_name=""
 	count = 0
 	for line in iter(fpage.readline, ''):
-                 print line
+                 #print line
 	         # split the line into words
                  if(line == "\n"):
                      continue
@@ -18,6 +18,7 @@ def page_analyze(file_name):
 	         if count == 0 :
 	                # initialize page_name to the first word
 	                page_name = refw
+                        page_list.append(page_name)
 	
 	         # store the entire line as a function of page_name _ address         
 	         data_for_line = page_name + "_" + wordList[0]
@@ -52,8 +53,8 @@ def page_analyze(file_name):
 	
 	# print all the key value pairs. 
 	
-	for key, value in pagetables.iteritems() :
-	    print key, value
+	#for key, value in pagetables.iteritems() :
+	#    print key, value
 	
 	# for now it should just be one key
 	#for key in pagetables.keys():
@@ -62,19 +63,21 @@ def page_analyze(file_name):
 	nums = pagetables['7f1b1e49f000_7f1b1e49f010'].split()
 	value = nums[1].decode("hex") + nums[0].decode("hex") + nums[3].decode("hex") + nums[2].decode("hex")
 	encoding = chardet.detect(value)
-	if encoding['encoding'] == 'ascii':
-	    print 'string is in ascii'
-	print value
+	#if encoding['encoding'] == 'ascii':
+	#    print 'string is in ascii'
+	#print value
         
 
-pagetables = dict();
+# create a dictionary 
+pagetables = dict()
+page_list = list()
 #buffer_read =""
 #buffer_read += fptr.read()
 cur_buf=""
 #print buffer_read
 #for line in buffer_read.readl():
 count=0;
-with  open('./4k_full_blocks','r') as fptr:
+with  open('./full_blocks','r') as fptr:
         for line in iter(fptr.readline, ''):
                 if ("END OF PAGE" not in line):
                         cur_buf += line
@@ -88,7 +91,14 @@ with  open('./4k_full_blocks','r') as fptr:
                         page_analyze(file_name)                      
                         count = count + 1
 
-
+print "here are all the pages parsed"
+for page in page_list:
+        print page
+print "We now have all the pages indexed"
+input_key = raw_input ("Enter the key ")
+print ("your key is" + input_key)
+value = pagetables[input_key]
+print value
      
                      
            
