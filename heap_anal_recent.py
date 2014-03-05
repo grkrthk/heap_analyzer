@@ -1,6 +1,6 @@
 import re
 import chardet
-
+import time
 fasci = open("./asci_interpret","w")
 def page_analyze(file_name):
 	# open the file that has the page
@@ -178,45 +178,51 @@ for page in page_list:
 
 input_ptr = raw_input ("Enter the pointer\t")
 
-#while (1):
+traverse_array = []
+
+while (1):
+        traverse_array.append(input_ptr)        
         #mask the last 12 bits to get the page name
-ref = input_ptr[0:5]
-#print ref
-in_ptr = input_ptr[0:9]
-in_ptr = in_ptr + "000"  # converted the pointer to  7f1b1e4e9000
-make_key = in_ptr+ "_"+input_ptr # recovered the key to hash into
-line = pagetables[make_key]    # get the line
-ptr_list = re.sub("[^\w]", " ",  line).split()  #split the line
+	ref = input_ptr[0:5]
+	#print ref
+	in_ptr = input_ptr[0:9]
+	in_ptr = in_ptr + "000"  # converted the pointer to  7f1b1e4e9000
+	make_key = in_ptr+ "_"+input_ptr # recovered the key to hash into
+	line = pagetables[make_key]    # get the line
+	ptr_list = re.sub("[^\w]", " ",  line).split()  #split the line
 
-ptr1 = ptr_list[1]+ptr_list[0]
-ptr2 = ptr_list[3]+ptr_list[2]
+	ptr1 = ptr_list[1]+ptr_list[0]
+	ptr2 = ptr_list[3]+ptr_list[2]
 
-ptr1addr = ptr1[4:9] # get the lower order address to compare for the first pointer
-ptr2addr = ptr2[4:9] # get the lower order address to compare for the second pointer
+	ptr1addr = ptr1[4:9] # get the lower order address to compare for the first pointer
+	ptr2addr = ptr2[4:9] # get the lower order address to compare for the second pointer
 
-if (ref not in ptr1addr and ref not in ptr2addr):
-              print "we have hit a dead end",pagetables[make_key]
+	if (ref not in ptr1addr and ref not in ptr2addr):
+	              print "we have hit a dead end",pagetables[make_key]
+                      break
 
-# consider the appropriate pointer to move foraward with
-prev_ptr = input_ptr
-length = len(input_ptr)
-if(input_ptr[length - 1] == '0'):
-                 if(ptr1addr in ref):
-                      input_ptr = ptr1
-                      input_ptr = input_ptr[4:(len(ptr1))]
-                      print input_ptr
-                      print pagetables[make_key]
-
-elif(input_ptr[length - 1] == '8'):
-                 if(ptr2addr in ref):
-                      input_ptr = ptr2
-                      input_ptr = input_ptr[4:(len(ptr2))]
-                      print input_ptr
-                      print pagetables[make_key]
-
-print prev_ptr
-print input_ptr
-
-if (prev_ptr == input_ptr):
-            print "circular links found"
-            
+	# consider the appropriate pointer to move foraward with
+	prev_ptr = input_ptr
+	length = len(input_ptr)
+	if(input_ptr[length - 1] == '0'):
+	                 if(ptr1addr in ref):
+	                      input_ptr = ptr1
+	                      input_ptr = input_ptr[4:(len(ptr1))]
+	                      #print input_ptr
+	                      print pagetables[make_key]
+	
+	elif(input_ptr[length - 1] == '8'):
+	                 if(ptr2addr in ref):
+	                      input_ptr = ptr2
+	                      input_ptr = input_ptr[4:(len(ptr2))]
+	                      #print input_ptr
+	                      print pagetables[make_key]
+	
+	print "prev_ptr is",  prev_ptr
+	print "input_ptr is", input_ptr
+	time.sleep(2)
+        if (input_ptr in traverse_array):
+                    print "circular links found"
+                    break
+	
+	            
