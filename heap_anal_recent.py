@@ -15,12 +15,12 @@ def page_analyze(file_name):
                      continue
                  
                  # just printing the asci equivalent of every line
-                 nums = line.split()
-                
+                 nums = line.split()                
                  value1 = nums[4].decode("hex") + nums[3].decode("hex") + nums[2].decode("hex") + nums[1].decode("hex")
                  encoding = chardet.detect(value1)
                  if encoding['encoding'] == 'ascii':
-                          print >> fasci,value1[::-1]
+                          clean = re.sub('[^\s!-~]', '', value1)
+                          print >> fasci,clean[::-1]
 
 	         wordList = re.sub("[^\w]", " ",  line).split()
 	         refw = wordList[0]
@@ -138,8 +138,8 @@ print "We now have all the pages indexed"
 
 #input_key = raw_input ("Enter the key ")
 #print ("your key is" + input_key)
-#value = pagetables[input_key]
-#print value
+value = pagetables["7f1b1e4cf000"]
+print value
 #print_tree(input_key)
 
 #print out all the pointers
@@ -158,4 +158,65 @@ for page in page_list:
 #                     encoding = chardet.detect(value1)
 #                     if encoding['encoding'] == 'ascii':
 #                           print value1
-	
+
+# take a pointer as a input and traverse the heap
+
+#take ptr as an input
+#while (1)
+#         go to the pointer location by hashing the dictionary
+#         check out the value (16 bytes)
+#         determine if that line contains a pointer
+#         if so split the value into (2 pointers)
+#         take the appropriate pointer based on the address
+#         print the indirection (--->)
+#         set preev as input
+#         set the input as one of the pointers
+#         if input is same as prev it has cyclic dependency
+         
+         
+# 7f1b1e4e9580
+
+input_ptr = raw_input ("Enter the pointer\t")
+
+#while (1):
+        #mask the last 12 bits to get the page name
+ref = input_ptr[0:5]
+#print ref
+in_ptr = input_ptr[0:9]
+in_ptr = in_ptr + "000"  # converted the pointer to  7f1b1e4e9000
+make_key = in_ptr+ "_"+input_ptr # recovered the key to hash into
+line = pagetables[make_key]    # get the line
+ptr_list = re.sub("[^\w]", " ",  line).split()  #split the line
+
+ptr1 = ptr_list[1]+ptr_list[0]
+ptr2 = ptr_list[3]+ptr_list[2]
+
+ptr1addr = ptr1[4:9] # get the lower order address to compare for the first pointer
+ptr2addr = ptr2[4:9] # get the lower order address to compare for the second pointer
+
+if (ref not in ptr1addr and ref not in ptr2addr):
+              print "we have hit a dead end",pagetables[make_key]
+
+# consider the appropriate pointer to move foraward with
+prev_ptr = input_ptr
+length = len(input_ptr)
+if(input_ptr[length - 1] == '0'):
+                 if(ptr1addr in ref):
+                      input_ptr = ptr1
+                      input_ptr = input_ptr[4:(len(ptr1))]
+                      print input_ptr
+                      print pagetables[make_key]
+
+elif(input_ptr[length - 1] == '8'):
+                 if(ptr2addr in ref):
+                      input_ptr = ptr2
+                      input_ptr = input_ptr[4:(len(ptr2))]
+                      print input_ptr
+                      print pagetables[make_key]
+
+print prev_ptr
+print input_ptr
+
+if (prev_ptr == input_ptr):
+            print "circular links found"
+            
