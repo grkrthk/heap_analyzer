@@ -81,8 +81,8 @@ def print_tree(input_key):
                   # split the input_key
                   if "_" in input_key:
                            splitkeys = re.sub("_", input_key).split()
-                           page_name = splitwords[0]
-                           line_name = splitwords[1]
+                           page_name = splitkeys[0]
+                           line_name = splitkeys[1]
                   
                   # trying to see if the value words look like pointers
                   valuewords = re.sub(" ", value).split()

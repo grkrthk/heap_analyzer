@@ -1,6 +1,7 @@
 import re
 import chardet
 
+fasci = open("./asci_interpret","w")
 def page_analyze(file_name):
 	# open the file that has the page
 	fpage = open(file_name, 'r')
@@ -12,6 +13,15 @@ def page_analyze(file_name):
 	         # split the line into words
                  if(line == "\n"):
                      continue
+                 
+                 # just printing the asci equivalent of every line
+                 nums = line.split()
+                
+                 value1 = nums[4].decode("hex") + nums[3].decode("hex") + nums[2].decode("hex") + nums[1].decode("hex")
+                 encoding = chardet.detect(value1)
+                 if encoding['encoding'] == 'ascii':
+                          print >> fasci,value1[::-1]
+
 	         wordList = re.sub("[^\w]", " ",  line).split()
 	         refw = wordList[0]
 	         
@@ -63,9 +73,9 @@ def page_analyze(file_name):
 	nums = pagetables['7f1b1e49f000_7f1b1e49f010'].split()
 	value = nums[1].decode("hex") + nums[0].decode("hex") + nums[3].decode("hex") + nums[2].decode("hex")
 	encoding = chardet.detect(value)
-	#if encoding['encoding'] == 'ascii':
-	#    print 'string is in ascii'
-	#print value
+	if encoding['encoding'] == 'ascii':
+	    #print 'string is in ascii'
+	    print value
 
 def print_tree(input_key):
         
@@ -77,15 +87,16 @@ def print_tree(input_key):
 
         while (input_key in pagetables.keys()): 
                   value = pagetables[input_key]
-                  
+                  print input_key
                   # split the input_key
                   if "_" in input_key:
-                           splitkeys = re.sub("_", input_key).split()
-                           page_name = splitwords[0]
-                           line_name = splitwords[1]
+                           splitkeys = re.sub("[^\w]","_",input_key).split()
+                           page_name = splitkeys[0]
+                           line_name = splitkeys[1]
                   
                   # trying to see if the value words look like pointers
-                  valuewords = re.sub(" ", value).split()
+                  valuewords = re.sub("[^\w]"," ", value).split()
+                  print valuewords
                   addr1 = valuewords[2] + valuewords[1]
                   addr2 = valuewords[4] + valuewords[3]
                   subaddr = line_name[0:5]
@@ -121,16 +132,30 @@ with  open('./full_blocks','r') as fptr:
                         count = count + 1
 
 print "here are all the pages parsed"
-for page in page_list:
-        print page
+#for page in page_list:
+#        print page
 print "We now have all the pages indexed"
-input_key = raw_input ("Enter the key ")
-print ("your key is" + input_key)
-value = pagetables[input_key]
-print value
-print_tree(input_key)
-     
-                     
+
+#input_key = raw_input ("Enter the key ")
+#print ("your key is" + input_key)
+#value = pagetables[input_key]
+#print value
+#print_tree(input_key)
+
+#print out all the pointers
+for page in page_list:
+   #print(page, len([item for item in value if item]))     
+   if page in pagetables.keys():
+          value = pagetables[page]
+          print(page, len(value)*4)                  
+
            
-         
+#for key, value in pagetables.iteritems() :
+#           #print key, value
+#           if type(value) is not list:
+#                     nums = value.split()
+#                     value1 = nums[1].decode("hex") + nums[0].decode("hex") + nums[3].decode("hex") + nums[2].decode("hex")
+#                     encoding = chardet.detect(value1)
+#                     if encoding['encoding'] == 'ascii':
+#                           print value1
 	
