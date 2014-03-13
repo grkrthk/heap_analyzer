@@ -179,6 +179,7 @@ for page in page_list:
 # 7f1b1e4e9580
 
 
+<<<<<<< HEAD:heap_anal_ptr_anal.py
 fptrc = open("./ptr_analysis","w")
 mis_count = 0
 for key, value in pagetables.iteritems() :
@@ -205,6 +206,47 @@ for key, value in pagetables.iteritems() :
                        mis_count = mis_count + 1
                        break
 		ptr_list = re.sub("[^\w]", " ",  line).split()  #split the line
+=======
+traverse_array = []
+
+while (1):
+        traverse_array.append(input_ptr)        
+        #mask the last 12 bits to get the page name
+	ref = input_ptr[0:5]
+	#print ref
+	in_ptr = input_ptr[0:9]
+	in_ptr = in_ptr + "000"  # converted the pointer to  7f1b1e4e9000
+        
+        if ("8" in input_ptr[11]):
+               temp = input_ptr[0:11]+"0"   # case handling where the pointer end with 8th byte
+               make_key = in_ptr + "_" + temp
+               print temp
+               print make_key
+        else :
+	       make_key = in_ptr+ "_"+input_ptr # recovered the key to hash into
+	line = pagetables[make_key]    # get the line
+	ptr_list = re.sub("[^\w]", " ",  line).split()  #split the line
+
+	ptr1 = ptr_list[1]+ptr_list[0]
+	ptr2 = ptr_list[3]+ptr_list[2]
+
+	ptr1addr = ptr1[4:9] # get the lower order address to compare for the first pointer
+	ptr2addr = ptr2[4:9] # get the lower order address to compare for the second pointer
+
+	if (ref not in ptr1addr and ref not in ptr2addr):
+	              print "we have hit a dead end",pagetables[make_key]
+                      break
+
+	# consider the appropriate pointer to move foraward with
+	prev_ptr = input_ptr
+	length = len(input_ptr)
+	if(input_ptr[length - 1] == '0'):
+	                 if(ptr1addr in ref):
+	                      input_ptr = ptr1
+	                      input_ptr = input_ptr[4:(len(ptr1))]
+	                      #print input_ptr
+	                      print pagetables[make_key]
+>>>>>>> 605d31747f813628dbd8f8154cb5613130a90f52:heap_anal_recent.py
 	
 		ptr1 = ptr_list[1]+ptr_list[0]
 		ptr2 = ptr_list[3]+ptr_list[2]
