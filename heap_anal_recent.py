@@ -187,7 +187,14 @@ while (1):
 	#print ref
 	in_ptr = input_ptr[0:9]
 	in_ptr = in_ptr + "000"  # converted the pointer to  7f1b1e4e9000
-	make_key = in_ptr+ "_"+input_ptr # recovered the key to hash into
+        
+        if ("8" in input_ptr[11]):
+               temp = input_ptr[0:11]+"0"   # case handling where the pointer end with 8th byte
+               make_key = in_ptr + "_" + temp
+               print temp
+               print make_key
+        else :
+	       make_key = in_ptr+ "_"+input_ptr # recovered the key to hash into
 	line = pagetables[make_key]    # get the line
 	ptr_list = re.sub("[^\w]", " ",  line).split()  #split the line
 
