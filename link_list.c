@@ -11,7 +11,7 @@ void main()
 {
    struct node* temp=NULL;
    int counter = 0;
-   while(counter!=10){
+   while(1){
        temp=(struct node*)malloc(sizeof(struct node));
        temp->link = head;
        temp->i = counter++;
